@@ -43,12 +43,17 @@ class DBStorage:
     def all(self, cls=None):
         """query on the current database session"""
         new_dict = {}
-        for clss in classes:
-            if cls is None or cls is classes[clss] or cls is clss:
+        if cls is None:
+            for clss in classes:
                 objs = self.__session.query(classes[clss]).all()
                 for obj in objs:
                     key = obj.__class__.__name__ + '.' + obj.id
                     new_dict[key] = obj
+        else:
+            objs = self.__session.query(cls).all()
+            for obj in objs:
+                key = obj.__class__.__name__ + '.' + obj.id
+                new_dict[key] = obj
         return (new_dict)
 
     def new(self, obj):
@@ -74,3 +79,26 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+
+    def get(self, cls, id):
+        """ Retrieve object from files """
+        data = self.all()
+        for x, obj in data.items():
+            keys = x.split(".")
+            if cls.__name__ == keys[0] and id == keys[1]:
+                return obj
+
+    def count(self, cls=None):
+        """ Count elements  """
+        data = self.all()
+        count = 0
+        if cls is None:
+            for x, _ in data.items():
+                count += 1
+            return count
+        else:
+            for x, _ in data.items():
+                keys = x.split(".")
+                if cls.__name__ == keys[0]:
+                    count += 1
+            return count
