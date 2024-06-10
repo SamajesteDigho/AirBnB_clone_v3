@@ -3,6 +3,7 @@
     Here we talk of the indexes
 """
 from api.v1.views import app_views
+from flask import jsonify
 from models import storage
 from models.state import State
 from models.amenity import Amenity
@@ -28,4 +29,4 @@ def statistics():
     for key, cls in classes.items():
         name = key.lower()
         data[name] = storage.count(cls=cls)
-    return data
+    return jsonify(data)
