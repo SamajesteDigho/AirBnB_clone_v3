@@ -45,23 +45,24 @@ def delete_state_by_id(state_id):
 @app_views.route("/states", methods=['POST'])
 def new_state_object():
     """ Creating new object """
-    info = request.get_json()
-    if 'name' not in list(info.keys()):
+    try:
+        info = request.get_json()
+    except Exception:
         abort(jsonify(error="Mising name"), 400)
-    else:
-        state = State(name=info['name'])
-        response = make_response(jsonify(state.to_dict()), 201)
-        return response
+    state = State(name=info['name'])
+    response = make_response(jsonify(state.to_dict()), 201)
+    return response
 
 
 @app_views.route("/states/<state_id>", methods=['PUT'])
 def update_state_by_id(state_id):
     """ Lets update that state """
     state = storage.get(cls=State, id=state_id)
-    info = request.get_json()
     if state is None:
         abort(404)
-    if not isinstance(info, dict):
+    try:
+        info = request.get_json()
+    except Exception:
         abort(jsonify(error="Not a JSON"), 400)
     if 'name' in list(info.keys()):
         state.name = info['name']
