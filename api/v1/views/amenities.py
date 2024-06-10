@@ -12,12 +12,11 @@ from api.v1.views import app_views
 @app_views.route("/amenities", methods=['GET'])
 def get_amenities():
     """ Get all amenities """
-    data = storage.all(cls=Amenity)
-    amenities = []
-    for _, x in data.items():
-        amenities.append(x.to_dict())
-    
-    response = make_response(jsonify(amenities), 200)
+    amenities = storage.all(cls=Amenity)
+    result = []
+    for _, x in amenities.items():
+        result.append(x.to_dict())
+    response = make_response(result, 200)
     return response
 
 
@@ -52,14 +51,14 @@ def post_amenities():
         abort(jsonify(message="Not a JSON"), 400)
     if 'name' not in list(body.keys()):
         abort(jsonify(message="Missing name"), 400)
-    amenity = Amenity(name=body['name'])
+    amenity = Amenity(name=body.get('name', None))
     amenity.save()
     response = make_response(amenity.to_dict(), 201)
     return response
 
 
 @app_views.route("/amenities/<amenity_id>", methods=['PUT'])
-def put_amennities(amenity_id):
+def put_amenities(amenity_id):
     """ Update the amenity with put """
     amenity = storage.get(cls=Amenity, id=amenity_id)
     if amenity is None:
@@ -68,8 +67,7 @@ def put_amennities(amenity_id):
         body = request.get_json()
     except Exception:
         abort(jsonify(message="Not a JSON"), 400)
-    if 'name' in list(body.keys()):
-        amenity.name = body['name']
-        amenity.save()
+    amenity.name = body.get('name', amenity.name)
+    amenity.save()
     response = make_response(amenity.to_dict(), 200)
     return response

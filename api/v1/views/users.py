@@ -52,7 +52,6 @@ def new_user_object():
         abort(jsonify(error="Missing email"), 400)
     if 'password' not in list(body.keys()):
         abort(jsonify(error="Missing password"), 400)
-
     user = User(email=body['email'], password=body['password'])
     user.first_name = body.get('first_name', None)
     user.last_name = body.get('last_name', None)
@@ -71,7 +70,6 @@ def update_user_by_id(user_id):
         body = request.get_json()
     except Exception:
         abort(jsonify(error="Not a JSON"), 400)
-
     user.first_name = body.get('first_name', user.first_name)
     user.last_name = body.get('last_name', user.last_name)
     user.password = body.get('password', user.password)
