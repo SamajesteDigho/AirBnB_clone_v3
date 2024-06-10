@@ -36,6 +36,8 @@ def delete_state_by_id(state_id):
     print(state)
     if state is None:
         abort(404)
+    for city in state.cities:
+        city.delete()
     state.delete()
     storage.save()
     response = make_response({}, 200)
@@ -48,9 +50,11 @@ def new_state_object():
     try:
         body = request.get_json()
     except Exception:
-        abort({"error": "Not a JSON"}, 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     if 'name' not in list(body.keys()):
-        abort({"error": "Missing name"}, 400)
+        response = make_response({"error": "Missing name"}, 400)
+        return response
     state = State(name=body.get('name', None))
     state.save()
     response = make_response(state.to_dict(), 201)
@@ -66,7 +70,8 @@ def update_state_by_id(state_id):
     try:
         body = request.get_json()
     except Exception:
-        abort({"error": "Not a JSON"}, 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     state.name = body.get('name', state.name)
     state.save()
     response = make_response(state.to_dict(), 200)
