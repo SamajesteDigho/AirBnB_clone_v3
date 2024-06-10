@@ -50,11 +50,9 @@ def new_state_object():
     try:
         body = request.get_json()
     except Exception:
-        response = make_response({"error": "Not a JSON"}, 400)
-        return response
+        abort({"error": "Not a JSON"}, 400)
     if 'name' not in list(body.keys()):
-        response = make_response({"error": "Missing name"}, 400)
-        return response
+        abort({"error": "Missing name"}, 400)
     state = State(name=body.get('name', None))
     state.save()
     response = make_response(state.to_dict(), 201)
@@ -70,8 +68,7 @@ def update_state_by_id(state_id):
     try:
         body = request.get_json()
     except Exception:
-        response = make_response({"error": "Not a JSON"}, 400)
-        return response
+        abort({"error": "Not a JSON"}, 400)
     state.name = body.get('name', state.name)
     state.save()
     response = make_response(state.to_dict(), 200)
