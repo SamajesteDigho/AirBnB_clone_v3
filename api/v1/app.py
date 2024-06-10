@@ -3,7 +3,7 @@
     Here is the app file
 """
 from os import getenv
-from flask import Flask, jsonify
+from flask import Flask, make_response
 from models import storage
 from api.v1.views import app_views
 
@@ -15,7 +15,8 @@ app.register_blueprint(blueprint=app_views)
 @app.errorhandler(404)
 def error_404_handler(e):
     """ Handling 404 error """
-    return jsonify({"error": "Not found"})
+    response = make_response({"error": "Not found"}, 404)
+    return response
 
 
 @app.teardown_appcontext
