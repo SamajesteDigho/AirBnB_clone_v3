@@ -26,5 +26,6 @@ def statistics():
     """ Return a json of the statistics """
     data = {}
     for key, cls in classes.items():
-        data[key] = storage.count(cls=cls)
+        name = key.lower()
+        data[name] = storage.count(cls=cls)
     return data
