@@ -8,6 +8,7 @@ from models.state import State
 from models import storage
 from api.v1.views import app_views
 
+
 @app_views.route("/states/<state_id>/cities", methods=['GET'])
 def cities(state_id):
     """ List all the cities belonging to a state """
