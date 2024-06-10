@@ -13,13 +13,12 @@ from api.v1.views import app_views
 def cities(state_id):
     """ List all the cities belonging to a state """
     state = storage.get(cls=State, id=state_id)
-    if state is None:
+    if city is None:
         abort(404)
     cities = []
     for city in state.cities:
         cities.append(city.to_dict())
-
-    response = make_response(jsonify(cities))
+    response = make_response(cities, 200)
     return response
 
 
@@ -29,7 +28,7 @@ def city_by_id(city_id):
     city = storage.get(cls=City, id=city_id)
     if city is None:
         abort(404)
-    response = make_response(jsonify(city.to_dict()))
+    response = make_response(city.to_dict(), 200)
     return response
 
 
@@ -39,9 +38,9 @@ def city_delete(city_id):
     city = storage.get(cls=City, id=city_id)
     if city is None:
         abort(404)
-    storage.delete(obj=city)
+    city.delete()
     storage.save()
-    response = make_response(jsonify({}), 200)
+    response = make_response({}, 200)
     return response
 
 
@@ -57,9 +56,9 @@ def new_city(state_id):
         abort(jsonify(message="Not a JSON"), 400)
     if 'name' not in list(body.keys()):
         abort(jsonify(message="Missing name"), 400)
-    city = City(state_id=state_id, name=body['name'])
+    city = City(state_id=state_id, name=body.get('name', None))
     city.save()
-    response = make_response(jsonify(city.to_dict()), 201)
+    response = make_response(city.to_dict(), 201)
     return response
 
 
@@ -73,8 +72,7 @@ def update_city(city_id):
         body = request.get_json()
     except Exception:
         abort(jsonify(message="Not a JSON"), 400)
-    if 'name' in list(body.keys()):
-        city.name = body['name']
-        city.save()
-    response = make_response(jsonify(city.to_dict()), 200)
+    city.name = body.get('name', city.name)
+    city.save()
+    response = make_response(city.to_dict(), 200)
     return response
