@@ -3,7 +3,5 @@
     Here is the view initialization instance
 """
 from flask import Blueprint
+app_views = Blueprint(name="v1", import_name=__name__, url_prefix="/api/v1")
 from api.v1.views.index import *
-
-
-app_views = Blueprint(url_prefix="/api/v1")
