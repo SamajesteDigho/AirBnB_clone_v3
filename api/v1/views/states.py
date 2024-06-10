@@ -2,7 +2,7 @@
 """
     Here we manage all the State urls
 """
-from flask import jsonify, abort, request, make_response
+from flask import abort, request, make_response
 from models.state import State
 from models import storage
 from api.v1.views import app_views
@@ -48,9 +48,9 @@ def new_state_object():
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(error="Not a JSON"), 400)
+        abort({"error": "Not a JSON"}, 400)
     if 'name' not in list(body.keys()):
-        abort(jsonify(error="Missing name"), 400)
+        abort({"error": "Missing name"}, 400)
     state = State(name=body.get('name', None))
     state.save()
     response = make_response(state.to_dict(), 201)
@@ -66,7 +66,7 @@ def update_state_by_id(state_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(error="Not a JSON"), 400)
+        abort({"error": "Not a JSON"}, 400)
     state.name = body.get('name', state.name)
     state.save()
     response = make_response(state.to_dict(), 200)
