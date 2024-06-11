@@ -13,7 +13,7 @@ from api.v1.views import app_views
 def cities(state_id):
     """ List all the cities belonging to a state """
     state = storage.get(cls=State, id=state_id)
-    if city is None:
+    if state is None:
         abort(404)
     cities = []
     for city in state.cities:
