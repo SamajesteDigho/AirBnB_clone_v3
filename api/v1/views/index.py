@@ -16,6 +16,8 @@ from models.user import User
 classes = {"Amenity": Amenity, "City": City,
            "Place": Place, "Review": Review, "State": State, "User": User}
 
+names = {"Amenity": 'amenities', "City": 'cities', "Place": 'places',
+         "Review": 'reviews', "State": 'states', "User": 'users'}
 
 @app_views.route('/status')
 def status():
@@ -28,6 +30,6 @@ def statistics():
     """ Return a json of the statistics """
     data = {}
     for key, cls in classes.items():
-        name = key.lower()
+        name = names[key]
         data[name] = storage.count(cls=cls)
     return make_response(data, 200)
