@@ -19,6 +19,7 @@ classes = {"Amenity": Amenity, "City": City,
 names = {"Amenity": 'amenities', "City": 'cities', "Place": 'places',
          "Review": 'reviews', "State": 'states', "User": 'users'}
 
+
 @app_views.route('/status')
 def status():
     """ Return the page status """
