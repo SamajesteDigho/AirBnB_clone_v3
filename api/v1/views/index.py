@@ -3,7 +3,7 @@
     Here we talk of the indexes
 """
 from api.v1.views import app_views
-from flask import jsonify
+from flask import make_response
 from models import storage
 from models.state import State
 from models.amenity import Amenity
@@ -20,7 +20,7 @@ classes = {"Amenity": Amenity, "City": City,
 @app_views.route('/status')
 def status():
     """ Return the page status """
-    return {"status": "OK"}
+    return make_response({"status": "OK"}, 200)
 
 
 @app_views.route("/stats")
@@ -30,4 +30,4 @@ def statistics():
     for key, cls in classes.items():
         name = key.lower()
         data[name] = storage.count(cls=cls)
-    return jsonify(data)
+    return make_response(data, 200)
