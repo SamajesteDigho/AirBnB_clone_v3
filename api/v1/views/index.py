@@ -26,7 +26,7 @@ def status():
     return make_response({"status": "OK"}, 200)
 
 
-@app_views.route("/stats/")
+@app_views.route("/stats")
 def statistics():
     """ Return a json of the statistics """
     data = {}
