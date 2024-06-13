@@ -82,22 +82,13 @@ class DBStorage:
 
     def get(self, cls, id):
         """ Retrieve object from files """
-        data = self.all()
-        for x, obj in data.items():
-            keys = x.split(".")
-            if cls.__name__ == keys[0] and id == keys[1]:
+        data = self.all(cls=cls)
+        for _, obj in data.items():
+            if id == obj.id:
                 return obj
         return None
 
     def count(self, cls=None):
         """ Count elements  """
-        data = self.all()
-        if cls is None:
-            return data.__len__()
-        else:
-            count = 0
-            for x, _ in data.items():
-                keys = x.split(".")
-                if cls.__name__ == keys[0]:
-                    count += 1
-            return count
+        data = self.all(cls=cls)
+        return data.__len__()
