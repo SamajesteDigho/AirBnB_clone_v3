@@ -47,11 +47,9 @@ def new_user_object():
     try:
         body = request.get_json()
     except Exception:
-        response = make_response({"error": "Not a JSON"}, 400)
-        return response
+        return make_response({"error": "Not a JSON"}, 400)
     if 'email' not in list(body.keys()):
-        response = make_response({"error": "Missing email"}, 400)
-        return response
+        return make_response({"error": "Missing email"}, 400)
     if 'password' not in list(body.keys()):
         return make_response({"error": "Missing password"}, 400)
     user = User(email=body['email'], password=body['password'])
