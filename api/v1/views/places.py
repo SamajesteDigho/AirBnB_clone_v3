@@ -54,14 +54,17 @@ def create_place(city_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(message="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     if 'user_id' not in list(body.keys()):
-        abort(jsonify(message="Missing user_id"), 400)
+        response = make_response({"error": "Missing user_id"}, 400)
+        return response
     user = storage.get(cls=User, id=body.get('user_id', None))
     if user is None:
         abort(404)
     if 'name' not in list(body.keys()):
-        abort(jsonify(message="Missing name"), 400)
+        response = make_response({"error": "Missing name"}, 400)
+        return response
     place = Place(user_id=user.id, city_id=city.id, name=body.get('name', None))
     place.description = body.get('description', None)
     place.number_rooms = body.get('number_rooms', 0)
@@ -84,7 +87,8 @@ def update_place(place_id):
     try:
         body = request.get_json()
     except Exception:
-        abort({"message": "Not a JSON"}, 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     place.name = body.get('name', place.name)
     place.description = body.get('description', place.description)
     place.number_rooms = body.get('number_rooms', place.number_rooms)

@@ -2,7 +2,7 @@
 """
     Here we manage all the Place urls
 """
-from flask import jsonify, abort, request, make_response
+from flask import abort, request, make_response
 from models.review import Review
 from models.user import User
 from models.place import Place
@@ -54,14 +54,17 @@ def create_review(place_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(message="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     if 'user_id' not in list(body.keys()):
-        abort(jsonify(message="Missing user_id"), 400)
+        response = make_response({"error": "Missing user_id"}, 400)
+        return response
     user = storage.get(cls=User, id=body.get('user_id', None))
     if user is None:
         abort(404)
     if 'text' not in list(body.keys()):
-        abort(jsonify(message="Missing text"), 400)
+        response = make_response({"error": "Missing text"}, 400)
+        return response
     review = Review(user_id=user.id, place_id=place.id, text=body.get('text', None))
     review.save()
     response = make_response(review.to_dict(), 201)
@@ -77,7 +80,8 @@ def update_review(review_id):
     try:
         body = request.get_json()
     except Exception:
-        abort({"message": "Not a JSON"}, 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     review.text = body.get('text', review.text)
     review.save()
     response = make_response(review.to_dict(), 200)

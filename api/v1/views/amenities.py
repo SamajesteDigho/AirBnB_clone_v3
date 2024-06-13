@@ -48,9 +48,11 @@ def post_amenities():
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(message="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     if 'name' not in list(body.keys()):
-        abort(jsonify(message="Missing name"), 400)
+        response = make_response({"error": "Missing name"}, 400)
+        return response
     amenity = Amenity(name=body.get('name', None))
     amenity.save()
     response = make_response(amenity.to_dict(), 201)
@@ -66,7 +68,8 @@ def put_amenities(amenity_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(message="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     amenity.name = body.get('name', amenity.name)
     amenity.save()
     response = make_response(amenity.to_dict(), 200)

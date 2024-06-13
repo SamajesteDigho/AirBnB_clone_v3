@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-""" Test .get() and .count() methods
+"""Testing file
 """
-from models import storage
-from models.state import State
+import json
+import requests
 
-print("All objects: {}".format(storage.count()))
-print("State objects: {}".format(storage.count(State)))
-
-first_state_id = list(storage.all(State).values())[0].id
-print("First state: {}".format(storage.get(State, first_state_id)))
+if __name__ == "__main__":
+    """ POST /api/v1/states
+    """
+    r = requests.post("http://127.0.0.1:5000/api/v1/states/", data={ 'name': "NewState" }, headers={ 'Content-Type': "application/x-www-form-urlencoded" })
+    print(r.status_code)

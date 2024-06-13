@@ -2,7 +2,7 @@
 """
     Here we manage all the State urls
 """
-from flask import jsonify, abort, request, make_response
+from flask import abort, request, make_response
 from models.city import City
 from models.state import State
 from models import storage
@@ -53,9 +53,11 @@ def new_city(state_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(message="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     if 'name' not in list(body.keys()):
-        abort(jsonify(message="Missing name"), 400)
+        response = make_response({"error": "Missing name"}, 400)
+        return response
     city = City(state_id=state_id, name=body.get('name', None))
     city.save()
     response = make_response(city.to_dict(), 201)
@@ -71,7 +73,8 @@ def update_city(city_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(message="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     city.name = body.get('name', city.name)
     city.save()
     response = make_response(city.to_dict(), 200)

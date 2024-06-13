@@ -2,7 +2,7 @@
 """
     Here we manage all the User urls
 """
-from flask import jsonify, abort, request, make_response
+from flask import abort, request, make_response
 from models.user import User
 from models import storage
 from api.v1.views import app_views
@@ -47,11 +47,14 @@ def new_user_object():
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(error="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     if 'email' not in list(body.keys()):
-        abort(jsonify(error="Missing email"), 400)
+        response = make_response({"error": "Missing email"}, 400)
+        return response
     if 'password' not in list(body.keys()):
-        abort(jsonify(error="Missing password"), 400)
+        response = make_response({"error": "Missing password"}, 400)
+        return response
     user = User(email=body['email'], password=body['password'])
     user.first_name = body.get('first_name', None)
     user.last_name = body.get('last_name', None)
@@ -69,7 +72,8 @@ def update_user_by_id(user_id):
     try:
         body = request.get_json()
     except Exception:
-        abort(jsonify(error="Not a JSON"), 400)
+        response = make_response({"error": "Not a JSON"}, 400)
+        return response
     user.first_name = body.get('first_name', user.first_name)
     user.last_name = body.get('last_name', user.last_name)
     user.password = body.get('password', user.password)
