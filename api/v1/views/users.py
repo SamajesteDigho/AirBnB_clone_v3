@@ -2,7 +2,7 @@
 """
     Here we manage all the User urls
 """
-from flask import abort, request, make_response
+from flask import abort, request, make_response, jsonify
 from models.user import User
 from models import storage
 from api.v1.views import app_views
@@ -15,7 +15,7 @@ def all_users():
     result = []
     for _, x in users.items():
         result.append(x.to_dict())
-    response = make_response(result, 200)
+    response = make_response(jsonify(result), 200)
     return response
 
 
