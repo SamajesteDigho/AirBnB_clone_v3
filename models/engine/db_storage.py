@@ -91,4 +91,4 @@ class DBStorage:
     def count(self, cls=None):
         """ Count elements  """
         data = self.all(cls=cls)
-        return data.__len__()
+        return data.items().__len__()
