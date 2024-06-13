@@ -92,12 +92,10 @@ class DBStorage:
     def count(self, cls=None):
         """ Count elements  """
         data = self.all()
-        count = 0
         if cls is None:
-            for x, _ in data.items():
-                count += 1
-            return count
+            return data.__len__()
         else:
+            count = 0
             for x, _ in data.items():
                 keys = x.split(".")
                 if cls.__name__ == keys[0]:

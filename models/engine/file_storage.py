@@ -75,15 +75,14 @@ class FileStorage:
             keys = x.split(".")
             if cls.__name__ == keys[0] and id == keys[1]:
                 return obj
+        return None
 
     def count(self, cls=None):
         """ Count elements  """
-        count = 0
         if cls is None:
-            for x, _ in self.__objects.items():
-                count += 1
-            return count
+            return self.__objects.__len__()
         else:
+            count = 0
             for x, _ in self.__objects.items():
                 keys = x.split(".")
                 if cls.__name__ == keys[0]:
