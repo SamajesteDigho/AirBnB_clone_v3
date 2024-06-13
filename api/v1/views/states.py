@@ -15,7 +15,7 @@ def all_states():
     result = []
     for _, x in states.items():
         result.append(x.to_dict())
-    response = make_response(result, 200)
+    response = make_response(jsonify(result), 200)
     return response
 
 

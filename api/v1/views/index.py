@@ -3,7 +3,7 @@
     Here we talk of the indexes
 """
 from api.v1.views import app_views
-from flask import make_response
+from flask import make_response, jsonify
 from models import storage
 from models.state import State
 from models.amenity import Amenity
@@ -33,4 +33,4 @@ def statistics():
     for key, cls in classes.items():
         name = names[key]
         data[name] = storage.count(cls=cls)
-    return make_response(data, 200)
+    return make_response(jsonify(data), 200)

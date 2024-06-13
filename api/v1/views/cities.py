@@ -2,7 +2,7 @@
 """
     Here we manage all the State urls
 """
-from flask import abort, request, make_response
+from flask import abort, request, make_response, jsonify
 from models.city import City
 from models.state import State
 from models import storage
@@ -18,7 +18,7 @@ def cities(state_id):
     cities = []
     for city in state.cities:
         cities.append(city.to_dict())
-    response = make_response(cities, 200)
+    response = make_response(jsonify(cities), 200)
     return response
 
 

@@ -16,7 +16,7 @@ def get_amenities():
     result = []
     for _, x in amenities.items():
         result.append(x.to_dict())
-    response = make_response(result, 200)
+    response = make_response(jsonify(result), 200)
     return response
 
 

@@ -2,7 +2,7 @@
 """
     Here we manage all the Place urls
 """
-from flask import abort, request, make_response
+from flask import abort, request, make_response, jsonify
 from models.review import Review
 from models.user import User
 from models.place import Place
@@ -19,7 +19,7 @@ def reviews(place_id):
     reviews = []
     for review in place.reviews:
         reviews.append(review.to_dict())
-    response = make_response(reviews, 200)
+    response = make_response(jsonify(reviews), 200)
     return response
 
 
