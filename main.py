@@ -5,8 +5,41 @@ import json
 import requests
 
 if __name__ == "__main__":
-    """ POST /api/v1/users/
+    """ get the state with cities
     """
-    r = requests.post("http://127.0.0.1:5000/api/v1/users/", data={ 'email': "f@f.com", 'password': "pwdf", 'first_name': "fnf", 'last_name': "lnf" }, headers={ 'Content-Type': "application/x-www-form-urlencoded" })
-    print(r.status_code)
+    r = requests.get("http://127.0.0.1:5000/api/v1/states")
+    r_j = r.json()
     
+    state_id = None
+    for state_j in r_j:
+        rs = requests.get("http://127.0.0.1:5000/api/v1/states/{}/cities".format(state_j.get('id')))
+        rs_j = rs.json()
+        if len(rs_j) != 0:
+            state_id = state_j.get('id')
+            break
+    
+    if state_id is None:
+        print("State with cities not found")
+    
+    """ get city
+    """
+    r = requests.get("http://127.0.0.1:5000/api/v1/states/{}/cities".format(state_id))
+    r_j = r.json()
+    city_id = None
+    for city_j in r_j:
+        rc = requests.get("http://127.0.0.1:5000/api/v1/cities/{}/places".format(city_j.get('id')))
+        rc_j = rc.json()
+        if len(rc_j) == 0:
+            city_id = city_j.get('id')
+            break
+    
+    if city_id is None:
+        print("City without places not found")
+    
+    
+    """ Fetch places
+    """
+    r = requests.get("http://127.0.0.1:5000/api/v1/cities/{}/places".format(city_id))
+    r_j = r.json()
+    print(type(r_j))
+    print(len(r_j))
