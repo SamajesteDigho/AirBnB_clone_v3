@@ -19,7 +19,7 @@ def places(city_id):
     places = []
     for place in city.places:
         places.append(place.to_dict())
-    response = make_response(places, 200)
+    response = make_response(jsonify(places), 200)
     return response
 
 
@@ -54,17 +54,14 @@ def create_place(city_id):
     try:
         body = request.get_json()
     except Exception:
-        response = make_response({"error": "Not a JSON"}, 400)
-        return response
+        return make_response({"error": "Not a JSON"}, 400)
     if 'user_id' not in list(body.keys()):
-        response = make_response({"error": "Missing user_id"}, 400)
-        return response
+        return make_response({"error": "Missing user_id"}, 400)
     user = storage.get(cls=User, id=body.get('user_id', None))
     if user is None:
         abort(404)
     if 'name' not in list(body.keys()):
-        response = make_response({"error": "Missing name"}, 400)
-        return response
+        return make_response({"error": "Missing name"}, 400)
     place = Place(user_id=user.id, city_id=city.id, name=body.get('name', None))
     place.description = body.get('description', None)
     place.number_rooms = body.get('number_rooms', 0)
@@ -87,8 +84,7 @@ def update_place(place_id):
     try:
         body = request.get_json()
     except Exception:
-        response = make_response({"error": "Not a JSON"}, 400)
-        return response
+        return make_response({"error": "Not a JSON"}, 400)
     place.name = body.get('name', place.name)
     place.description = body.get('description', place.description)
     place.number_rooms = body.get('number_rooms', place.number_rooms)
@@ -99,5 +95,4 @@ def update_place(place_id):
     place.latitude = body.get('latitude', place.latitude)
     place.longitude = body.get('longitude', place.longitude)
     place.save()
-    response = make_response(place.to_dict(), 200)
-    return response
+    return make_response(place.to_dict(), 200)
