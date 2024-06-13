@@ -5,7 +5,8 @@ import json
 import requests
 
 if __name__ == "__main__":
-    r = requests.get("http://127.0.0.1:5000/api/v1/users")
-    r_j = r.json()
-    print(type(r_j))
-    print(len(r_j))
+    """ POST /api/v1/users/
+    """
+    r = requests.post("http://127.0.0.1:5000/api/v1/users/", data={ 'email': "f@f.com", 'password': "pwdf", 'first_name': "fnf", 'last_name': "lnf" }, headers={ 'Content-Type': "application/x-www-form-urlencoded" })
+    print(r.status_code)
+    
