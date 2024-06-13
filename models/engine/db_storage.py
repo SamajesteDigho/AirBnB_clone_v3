@@ -87,6 +87,7 @@ class DBStorage:
             keys = x.split(".")
             if cls.__name__ == keys[0] and id == keys[1]:
                 return obj
+        return None
 
     def count(self, cls=None):
         """ Count elements  """
